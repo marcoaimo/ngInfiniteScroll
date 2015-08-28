@@ -15,6 +15,7 @@ mod.directive('infiniteScroll', [
         infiniteScrollParent: '=',
         infiniteScrollDistance: '=',
         infiniteScrollDisabled: '=',
+        limitedItemsNumber: '=',
         infiniteScrollUseDocumentBottom: '=',
         infiniteScrollListenForEvent: '@'
       },
@@ -76,9 +77,11 @@ mod.directive('infiniteScroll', [
             elementBottom = height((elem[0].ownerDocument || elem[0].document).documentElement);
           }
           shouldScrollTop = elementTop >= containerTop;
+          console.log(elementTop, containerTop);
+          console.log(attrs.infiniteScrollTop, attrs.infiniteScroll);
           remaining = elementBottom - containerBottom;
-          shouldScrollBottom = remaining <= height(container) * scrollDistance + 1;
-          if (shouldScrollTop) {
+          shouldScrollBottom = remaining < height(container) * scrollDistance + 1;
+          if (attrs.infiniteScrollTop && shouldScrollTop) {
             checkWhenEnabled = true;
             if (scrollEnabled) {
               if (scope.$$phase || $rootScope.$$phase) {
@@ -88,19 +91,28 @@ mod.directive('infiniteScroll', [
                 temp = height(elem);
                 scope.$apply(scope.infiniteScrollTop);
                 newHeight = height(elem) - temp;
-                container[0].scrollTop += newHeight;
+                if (scope.limitedItemsNumber) {
+                  console.log(elementHeight);
+                  container[0].scrollTop = elementHeight;
+                  console.log(container[0].scrollTop);
+                } else {
+                  container[0].scrollTop += newHeight;
+                }
               }
             }
           } else {
             checkWhenEnabled = false;
           }
-          if (shouldScrollBottom) {
+          if (attrs.infiniteScroll && shouldScrollBottom) {
             checkWhenEnabled = true;
             if (scrollEnabled) {
               if (scope.$$phase || $rootScope.$$phase) {
                 return scope.infiniteScroll();
               } else {
-                return scope.$apply(scope.infiniteScroll);
+                scope.$apply(scope.infiniteScroll);
+                if (scope.limitedItemsNumber) {
+                  return container[0].scrollTop -= elementHeight;
+                }
               }
             }
           } else {

@@ -6,7 +6,8 @@
 
   <ul infinite-scroll='loadMore()'
       infinite-scroll-distance='2'
-      infinite-scroll-disabled="disabled">
+      infinite-scroll-disabled="disabled"
+      limited-items-number="limited">
     <li ng-repeat='item in items' class="item">{{item}}</li>
   </ul>
 </div>

@@ -11,6 +11,7 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
     infiniteScrollParent: '='
     infiniteScrollDistance: '='
     infiniteScrollDisabled: '='
+    limitedItemsNumber: '='
     infiniteScrollUseDocumentBottom: '='
     infiniteScrollListenForEvent: '@'
 
@@ -73,9 +74,9 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
       shouldScrollTop = elementTop >= containerTop
 
       remaining = elementBottom - containerBottom
-      shouldScrollBottom = remaining <= height(container) * scrollDistance + 1
+      shouldScrollBottom = remaining < height(container) * scrollDistance + 1
 
-      if shouldScrollTop
+      if attrs.infiniteScrollTop && shouldScrollTop
         checkWhenEnabled = true
         if scrollEnabled
           if scope.$$phase || $rootScope.$$phase
@@ -85,11 +86,14 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
             temp = height(elem)
             scope.$apply(scope.infiniteScrollTop)
             newHeight = height(elem) - temp
-            container[0].scrollTop += newHeight
+            if scope.limitedItemsNumber
+              container[0].scrollTop = elementHeight
+            else
+              container[0].scrollTop += newHeight
       else
         checkWhenEnabled = false
 
-      if shouldScrollBottom
+      if attrs.infiniteScroll && shouldScrollBottom
         checkWhenEnabled = true
 
         if scrollEnabled
@@ -97,6 +101,8 @@ mod.directive 'infiniteScroll', ['$rootScope', '$window', '$interval', 'THROTTLE
             scope.infiniteScroll()
           else
             scope.$apply(scope.infiniteScroll)
+            if scope.limitedItemsNumber
+              container[0].scrollTop -= elementHeight
       else
         checkWhenEnabled = false
 

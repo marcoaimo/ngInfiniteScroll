@@ -83,6 +83,7 @@
           $scope.setCurrentExampleUrl($scope.examples[0]);
           $scope.dropdownToggle = true;
           $scope.disabled = false;
+          $scope.limited = false;
           $scope.items = [];
           $scope.loadMore = function() {
             var last = $scope.items[$scope.items.length - 1];
@@ -90,12 +91,18 @@
               $scope.items.push(last + i);
               console.log('pushed > ',last+i)
             };
+            if ($scope.limited) {
+              $scope.items.splice(0,6);
+            };
           };
           $scope.loadPre = function() {
             var first = $scope.items[0];
             for (var i = 1; i <= 6; i++) {
               $scope.items.unshift(first - i);
               console.log('unshifted > ',first - i)
+            };
+            if ($scope.limited) {
+              $scope.items.splice($scope.items.length - 6);
             };
           };
           $scope.resetItems = function(){
@@ -120,6 +127,10 @@
             <div class="form-group">
               <label>disable scroll</label>
               <input type="checkbox" ng-model="disabled" class="inline-checkbox">
+            </div>
+            <div class="form-group">
+              <label>limit items</label>
+              <input type="checkbox" ng-model="limited" class="inline-checkbox">
             </div>
             <div class="form-group">
               <button class="btn btn-sm btn-block btn-primary" ng-click="resetItems()">reset items</button>
