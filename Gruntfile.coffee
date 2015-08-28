@@ -6,6 +6,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-connect'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-protractor-runner'
+  grunt.loadNpmTasks 'grunt-browser-sync'
 
   sauceUser = 'pomerantsevp'
   sauceKey = '497ab04e-f31b-4a7b-9b18-ae3fbe023222'
@@ -78,6 +79,15 @@ module.exports = (grunt) ->
               testThrottleValue: 10000
             sauceUser: sauceUser
             sauceKey: sauceKey
+    browserSync:
+            test:
+                options:
+                    files: './test/index.html'
+                    server:
+                        baseDir: './'
+                        index: './test/index.html'
+                    watchTask: false
+                    open: true
 
   grunt.registerTask 'webdriver', () ->
     done = this.async()
@@ -108,3 +118,9 @@ module.exports = (grunt) ->
     'sauce-connect',
     'protractor:travis'
   ]
+
+  grunt.registerTask 'test', [
+    'default',
+    'browserSync:test'
+  ]
+

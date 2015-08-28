@@ -1,0 +1,137 @@
+<html ng-app="testApp">
+  <head>
+    <style>
+        html, body {
+          height: 100%;
+        }
+        h1 small{
+          display: block;
+        }
+        .container-fluid{
+          max-width: 1000px;
+          margin: auto;
+        }
+        .item{
+          display: inline-block;
+          background-color: cornflowerblue;
+          text-align: center;
+          margin: 40px;
+          color: white;
+          height: 150px;
+          width: 150px;
+          line-height: 150px;
+          font-size: 60px;
+          margin-bottom: 10px;
+        }
+        .dropdown-menu{
+          overflow: scroll;
+          max-height: 250px;
+        }
+        .dropdown-menu ul{
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        .dropdown-menu ul li{
+          height: 25px;
+          padding-left: 10px;
+          border-bottom: 1px solid salmon;
+        }
+        .scroll-top-parent{
+          height: 500px;
+          overflow: scroll;
+        }
+        .side-menu{
+          margin-top: 150px;
+          padding: 10px;
+        }
+        .side-menu ul{
+          list-style: none;
+          margin: 0;
+          padding: 0;
+        }
+        .side-menu ul li{
+          height: 25px;
+          padding: 0 10px;
+          border-bottom: 1px solid salmon;
+          cursor: pointer;
+        }
+        .side-menu ul li:hover{
+          background-color: salmon;
+          color: white;
+        }
+        .side-menu .form{
+          margin-top: 25px;
+        }
+        .side-menu .form .inline-checkbox{
+          margin-left: 15px;
+        }
+    </style>
+    <script src="../bower_components/angular/angular.min.js"></script>
+    <script src="../../build/ng-infinite-scroll.js"></script>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script>
+      angular
+        .module('testApp', ['infinite-scroll'])
+        .controller('AppCtrl', function($scope){
+          $scope.examples = ['example1', 'example2', 'example3'];
+          $scope.currentExampleUrl = '';
+          $scope.setCurrentExampleUrl = function(example){
+            var examplesPath = '../test/examples/';
+            $scope.currentExampleUrl = examplesPath + example + '.html';
+          }
+          $scope.setCurrentExampleUrl($scope.examples[0]);
+          $scope.dropdownToggle = true;
+          $scope.disabled = false;
+          $scope.items = [];
+          $scope.loadMore = function() {
+            var last = $scope.items[$scope.items.length - 1];
+            for (var i = 1; i <= 6; i++) {
+              $scope.items.push(last + i);
+              console.log('pushed > ',last+i)
+            };
+          };
+          $scope.loadPre = function() {
+            var first = $scope.items[0];
+            for (var i = 1; i <= 6; i++) {
+              $scope.items.unshift(first - i);
+              console.log('unshifted > ',first - i)
+            };
+          };
+          $scope.resetItems = function(){
+            $scope.items = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+          }
+          $scope.resetItems();
+        })
+    </script>
+  </head>
+  <body ng-controller="AppCtrl">
+    <div class="container-fluid">
+
+      <div class="row">
+        <div class="col-xs-2 side-menu">
+          <ul>
+            <li ng-repeat="example in examples"
+                ng-click="setCurrentExampleUrl(example)">
+              {{example}}
+            </li>
+          </ul>
+          <div class="form">
+            <div class="form-group">
+              <label>disable scroll</label>
+              <input type="checkbox" ng-model="disabled" class="inline-checkbox">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-sm btn-block btn-primary" ng-click="resetItems()">reset items</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-10">
+          <ng-include src="currentExampleUrl"></ng-include>
+        </div>
+      </div>
+
+    </div>  
+  </body>
+</html>

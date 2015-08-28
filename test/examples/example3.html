@@ -1,0 +1,18 @@
+<!-- infinite scroll top -->
+<div class="row">
+
+  <div class="scroll-top-parent">
+    <ul infinite-scroll infinite-scroll-top='loadPre()'
+        infinite-scroll-distance='2'
+        infinite-scroll-parent="true"
+        infinite-scroll-disabled="disabled">
+      <li ng-repeat='item in items' class="item">{{item}}</li>
+    </ul>
+  </div>
+
+  <div class="page-header">
+    <h1>Infinite Scroll Exampe page
+      <small>top scroll mod</small>
+    </h1>
+  </div>
+</div>

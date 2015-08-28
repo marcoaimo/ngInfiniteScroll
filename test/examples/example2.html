@@ -1,0 +1,28 @@
+<!-- inner element infinite scroll bottom and top -->
+<div class="row">
+  <div class="page-header">
+    <h1>Infinite Scroll Exampe page
+      <br>
+      <small>infinite scroll top mod</small>
+    </h1>
+  </div>
+
+  <div class="dropdown" ng-class="{open: dropdownToggle}">
+    <button class="btn btn-default dropdown-toggle" type="button"
+            ng-click="dropdownToggle = !dropdownToggle" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+      Dropdown
+      <span class="caret"></span>
+    </button>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenu">
+      <ul infinite-scroll='loadMore()'
+          infinite-scroll-top='loadPre()'
+          infinite-scroll-distance='0'
+          infinite-scroll-container="dropdownMenu"
+          infinite-scroll-parent="true"
+          infinite-scroll-disabled="disabled">
+        <li ng-repeat='item in items'>{{item}}</li>
+      </ul>
+    </div>
+  </div>
+</div>
