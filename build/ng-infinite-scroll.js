@@ -1,4 +1,4 @@
-/* ng-infinite-scroll - v1.3.0 - 2015-08-28 */
+/* ng-infinite-scroll - v1.3.1 - 2015-08-28 */
 var mod;
 
 mod = angular.module('infinite-scroll', []);
@@ -77,8 +77,6 @@ mod.directive('infiniteScroll', [
             elementBottom = height((elem[0].ownerDocument || elem[0].document).documentElement);
           }
           shouldScrollTop = elementTop >= containerTop;
-          console.log(elementTop, containerTop);
-          console.log(attrs.infiniteScrollTop, attrs.infiniteScroll);
           remaining = elementBottom - containerBottom;
           shouldScrollBottom = remaining < height(container) * scrollDistance + 1;
           if (attrs.infiniteScrollTop && shouldScrollTop) {
@@ -92,9 +90,7 @@ mod.directive('infiniteScroll', [
                 scope.$apply(scope.infiniteScrollTop);
                 newHeight = height(elem) - temp;
                 if (scope.limitedItemsNumber) {
-                  console.log(elementHeight);
                   container[0].scrollTop = elementHeight;
-                  console.log(container[0].scrollTop);
                 } else {
                   container[0].scrollTop += newHeight;
                 }
